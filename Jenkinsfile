@@ -21,6 +21,5 @@ pipeline {
                 sh 'docker run -d -p 80:80 --name mywebsite jenkins-cicd-demo:v1'
             }
         }
-
     }
 }
