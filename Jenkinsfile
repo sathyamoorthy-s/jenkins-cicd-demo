@@ -38,7 +38,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo 'Pipeline Trigger Test'
         }
 
         failure {
