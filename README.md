@@ -162,26 +162,43 @@ The following validations were successfully completed:
 
 ## 📸 Project Screenshots
 
-### 1. Jenkins Dashboard
-![Jenkins Dashboard](screenshots/01-jenkins-dashboard.png)
+### 1. GitHub Repository
+![GitHub Repository](screenshots/github-repository.png)
 
-### 2. GitHub Webhook
-![GitHub Webhook](screenshots/02-github-webhook.png)
+---
 
-### 3. Jenkins Build Console
-![Build Console](screenshots/03-build-console.png)
+### 2. Jenkins Build Console
+![Jenkins Build Console](screenshots/jenkins-console.png)
 
-### 4. Successful Pipeline
-![Pipeline](screenshots/04-pipeline-success.png)
+---
 
-### 5. Docker Images
-![Docker Images](screenshots/05-docker-images.png)
+### 3. Successful Jenkins Pipeline
+![Jenkins Pipeline Success](screenshots/jenkins-success.png)
 
-### 6. Running Docker Container
-![Docker Container](screenshots/06-running-container.png)
+---
 
-### 7. Live Website
-![Live Website](screenshots/07-live-website.png)
+### 4. Docker Container
+![Docker Container](screenshots/docker-container.png)
+
+---
+
+### 5. AWS EC2 Deployment
+![AWS EC2](screenshots/aws-ec2.png)
+
+---
+
+### 6. Live Portfolio Website
+![Live Website](screenshots/Home-page.png)
+
+---
+
+### 7. Portfolio Projects Page
+![Projects](screenshots/projects.png)
+
+---
+
+### 8. Resume Page
+![Resume](screenshots/Resume.png)
 
 ---
 
