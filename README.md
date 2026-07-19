@@ -1,208 +1,54 @@
-# CI/CD Pipeline using Jenkins, Docker & AWS
+# CI/CD Pipeline with Jenkins, Docker, and AWS EC2
 
-![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-red?logo=jenkins)
-![Docker](https://img.shields.io/badge/Docker-Containerization-blue?logo=docker)
-![AWS](https://img.shields.io/badge/AWS-EC2-orange?logo=amazonaws)
-![GitHub](https://img.shields.io/badge/GitHub-Webhooks-black?logo=github)
-![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
+## Overview
 
-> **An end-to-end CI/CD pipeline demonstrating automated application deployment using GitHub, Jenkins, Docker, and AWS EC2.**
+This project implements an automated CI/CD workflow for deploying a containerized static portfolio website to an AWS EC2 instance.
 
----
+The application is served by Nginx inside a Docker container. Source code is maintained in GitHub, and a GitHub Webhook triggers Jenkins when changes are pushed to the repository. The Jenkins pipeline retrieves the latest source code, builds a new Docker image, removes the previously running application container, and starts a new container with the updated version.
 
-## 📌 Project Overview
+The project was built to gain hands-on experience with Jenkins Pipeline as Code, webhook-based automation, Docker containerization, and application deployment on AWS EC2.
 
-This project demonstrates the implementation of an automated Continuous Integration and Continuous Deployment (CI/CD) pipeline using **GitHub, Jenkins, Docker, and AWS EC2**.
-
-Whenever code is pushed to the GitHub repository, a **GitHub Webhook** automatically triggers Jenkins. Jenkins retrieves the latest source code, builds a Docker image, replaces the existing container, and deploys the updated application to an AWS EC2 instance running Nginx.
-
-The project demonstrates practical DevOps concepts including Pipeline as Code, automated deployments, containerization, and continuous delivery.
-
----
-
-## 🎯 Project Objectives
-
-- Implement an automated CI/CD pipeline
-- Eliminate manual deployment
-- Automate Docker image creation
-- Deploy applications using Jenkins Pipeline
-- Demonstrate continuous integration and deployment practices
-
----
-
-## 💻 Skills Demonstrated
-
-- Git
-- GitHub
-- GitHub Webhooks
-- Jenkins
-- Jenkins Pipeline
-- Docker
-- Dockerfile
-- Nginx
-- AWS EC2
-- Linux
-- CI/CD
-- Pipeline as Code
-
----
-
-## 🏗 Architecture
-
-The following diagram illustrates the automated CI/CD workflow implemented in this project.
+## Architecture
 
 ![CI/CD Architecture](architecture.png)
 
----
+The deployment flow is:
 
-## ⚙️ Infrastructure Specifications
+1. Application code is pushed to the GitHub repository.
+2. A GitHub Webhook sends a request to Jenkins.
+3. Jenkins starts the pipeline defined in the `Jenkinsfile`.
+4. Jenkins retrieves the latest source code.
+5. Docker builds a new image containing the static website and Nginx.
+6. The existing application container is stopped and removed.
+7. A new container is started from the newly built image.
+8. Nginx serves the updated website from the EC2 instance.
 
-| Component | Configuration |
-|-----------|---------------|
-| Source Code | GitHub Repository |
-| CI/CD Tool | Jenkins |
-| Container Platform | Docker |
-| Web Server | Nginx |
-| Cloud Platform | AWS EC2 |
-| Deployment Type | Automated |
-| Trigger | GitHub Webhook |
+This approach automates the application deployment process after the initial Jenkins, Docker, webhook, and EC2 configuration has been completed.
 
----
+## Technology Stack
 
-## 🛠 Technologies Used
+| Technology      | Role in the Project                                    |
+| --------------- | ------------------------------------------------------ |
+| Git             | Source code version control                            |
+| GitHub          | Repository hosting and source code management          |
+| GitHub Webhooks | Automatically triggers the Jenkins pipeline            |
+| Jenkins         | Executes the CI/CD pipeline                            |
+| Jenkinsfile     | Defines the deployment workflow as code                |
+| Docker          | Builds and runs the application as a container         |
+| Nginx           | Serves the static portfolio website                    |
+| AWS EC2         | Hosts Jenkins and the deployed application environment |
+| Linux           | Operating environment for the EC2 instance             |
 
-| Technology | Purpose |
-|------------|---------|
-| Git | Version Control |
-| GitHub | Source Code Repository |
-| GitHub Webhooks | Automatic Build Trigger |
-| Jenkins | Continuous Integration & Deployment |
-| Docker | Application Containerization |
-| Nginx | Static Website Hosting |
-| AWS EC2 | Deployment Server |
-| Linux | Operating System |
+## Key Features
 
----
+* Jenkins Pipeline defined as code using a `Jenkinsfile`
+* Automatic pipeline triggering through GitHub Webhooks
+* Docker image creation as part of the deployment workflow
+* Containerized static website served through Nginx
+* Automated replacement of the existing application container
+* Deployment hosted on an AWS EC2 instance
 
-## 🏛 CI/CD Pipeline Design
-
-The pipeline follows an automated deployment workflow.
-
-- Source code is maintained in GitHub.
-- GitHub Webhooks trigger Jenkins automatically.
-- Jenkins retrieves the latest code.
-- Docker builds a new application image.
-- Existing Docker container is stopped and removed.
-- A new container is deployed automatically.
-- Nginx serves the updated website.
-
----
-
-## 🌐 CI/CD Workflow
-
-```text
-Developer
-      │
-   Git Push
-      │
-GitHub Repository
-      │
-GitHub Webhook
-      │
-Jenkins
-      │
-Docker Build
-      │
-Docker Container
-      │
-Nginx
-      │
-Live Website
-```
-
----
-
-## ✨ Key Features
-
-- Automated build pipeline using Jenkins
-- Pipeline as Code using Jenkinsfile
-- GitHub Webhook integration
-- Docker-based application deployment
-- Zero manual deployment
-- Containerized Nginx web server
-- AWS EC2 deployment
-
----
-
-## 🚀 Deployment Workflow
-
-1. Developer pushes code to GitHub.
-2. GitHub Webhook triggers Jenkins.
-3. Jenkins clones the latest repository.
-4. Docker builds a new image.
-5. Existing container is stopped.
-6. Existing container is removed.
-7. A new container is created.
-8. Nginx serves the updated application.
-
----
-
-## ✅ Testing & Validation
-
-The following validations were successfully completed:
-
-- ✅ GitHub Webhook triggered automatically
-- ✅ Jenkins pipeline executed successfully
-- ✅ Docker image built successfully
-- ✅ Existing container replaced automatically
-- ✅ Updated application deployed successfully
-- ✅ Website accessible through AWS EC2
-
----
-
-## 📸 Project Screenshots
-
-### 1. GitHub Repository
-![GitHub Repository](screenshots/github-repository.png)
-
----
-
-### 2. Jenkins Build Console
-![Jenkins Build Console](screenshots/jenkins-console.png)
-
----
-
-### 3. Successful Jenkins Pipeline
-![Jenkins Pipeline Success](screenshots/jenkins-success.png)
-
----
-
-### 4. Docker Container
-![Docker Container](screenshots/docker-container.png)
-
----
-
-### 5. AWS EC2 Deployment
-![AWS EC2](screenshots/aws-ec2.png)
-
----
-
-### 6. Live Portfolio Website
-![Live Website](screenshots/Home-page.png)
-
----
-
-### 7. Portfolio Projects Page
-![Projects](screenshots/projects.png)
-
----
-
-### 8. Resume Page
-![Resume](screenshots/Resume.png)
-
----
-
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 jenkins-cicd-demo/
@@ -218,54 +64,167 @@ jenkins-cicd-demo/
 └── screenshots/
 ```
 
----
+The two main deployment files are:
 
-## 🎓 Skills Gained
+* `Dockerfile` — defines the container image used to serve the static website through Nginx.
+* `Jenkinsfile` — defines the Jenkins pipeline responsible for building and redeploying the application.
 
-- Implemented Jenkins Pipeline as Code
-- Configured GitHub Webhooks
-- Built Docker images automatically
-- Automated application deployment
-- Deployed applications on AWS EC2
-- Learned CI/CD best practices
-- Worked with containerized deployments
+## Deployment Workflow
 
----
+The deployment begins when a code change is pushed to GitHub.
 
-## ⭐ DevOps Best Practices Followed
+### 1. Source Code Update
 
-- Pipeline as Code
-- Automated deployment
-- Containerization
-- Version Control
-- Continuous Integration
-- Continuous Deployment
-- Infrastructure consistency
-- Reproducible deployments
+Changes to the portfolio application are committed and pushed to the GitHub repository.
 
----
+### 2. Webhook Trigger
 
-## 🔮 Future Enhancements
+A GitHub Webhook is configured to notify Jenkins when repository changes occur. This removes the need to manually start the Jenkins job for each deployment.
 
-- Push Docker images to Docker Hub
-- Deploy to Private EC2 through a Bastion Host
-- Add Terraform Infrastructure as Code
-- Integrate Kubernetes deployment
-- Implement Blue-Green Deployment
-- Configure Monitoring using Prometheus and Grafana
+### 3. Jenkins Pipeline Execution
 
----
+Jenkins executes the pipeline defined in the repository's `Jenkinsfile` and retrieves the latest application source code.
 
-## 👨‍💻 Author
+### 4. Docker Image Build
+
+The pipeline builds a new Docker image using the project's `Dockerfile`. The image packages the static website with Nginx as the web server.
+
+### 5. Existing Container Replacement
+
+The previously running application container is stopped and removed before the updated version is deployed.
+
+### 6. Updated Container Deployment
+
+Jenkins starts a new Docker container from the newly built image. Nginx then serves the updated portfolio website from the EC2 instance.
+
+## Technical Decisions and Considerations
+
+### Pipeline as Code
+
+The CI/CD workflow is stored in a `Jenkinsfile` alongside the application source code rather than being defined only through the Jenkins UI.
+
+This keeps the pipeline configuration version-controlled and allows deployment changes to be tracked together with application changes.
+
+### GitHub Webhook Trigger
+
+A webhook was used to connect GitHub and Jenkins so that repository changes automatically initiate the deployment pipeline.
+
+This reduces the manual step of logging into Jenkins and starting a build after every code update.
+
+### Docker-Based Deployment
+
+The website is packaged into a Docker image with Nginx instead of copying application files directly onto the EC2 host during each deployment.
+
+Using a container provides a consistent runtime environment and makes the deployed application easier to replace as a single unit.
+
+### Container Replacement Strategy
+
+The pipeline deploys updates by stopping and removing the existing application container and starting a new container from the latest image.
+
+This is a straightforward deployment strategy suitable for this portfolio project. However, because the running container is replaced during deployment, this implementation should not be considered a zero-downtime deployment strategy.
+
+For a production environment requiring uninterrupted availability, a rolling, blue-green, or similar deployment strategy would be more appropriate.
+
+## Verification
+
+The implementation was verified at multiple stages of the deployment workflow.
+
+The following were tested during the project:
+
+* GitHub Webhook successfully triggered the Jenkins job.
+* Jenkins pipeline completed successfully.
+* Docker image was built through the pipeline.
+* The existing application container was replaced during deployment.
+* A new container was started from the updated image.
+* The deployed portfolio website was accessible from the EC2-hosted environment.
+* Application changes were reflected after the automated deployment workflow completed.
+
+The running container can be checked on the deployment host with:
+
+```bash
+docker ps
+```
+
+Jenkins build history and console output can also be used to verify pipeline execution and review individual deployment stages.
+
+## Project Screenshots
+
+The screenshots below document the repository, pipeline execution, container deployment, AWS environment, and deployed application.
+
+### GitHub Repository
+
+![GitHub Repository](screenshots/github-repository.png)
+
+Shows the source repository containing the application and deployment configuration.
+
+### Jenkins Build Console
+
+![Jenkins Build Console](screenshots/jenkins-console.png)
+
+Shows the Jenkins console output generated during pipeline execution.
+
+### Successful Jenkins Pipeline
+
+![Jenkins Pipeline Success](screenshots/jenkins-success.png)
+
+Confirms successful completion of the configured Jenkins pipeline.
+
+### Running Docker Container
+
+![Docker Container](screenshots/docker-container.png)
+
+Shows the application container running after deployment.
+
+### AWS EC2 Deployment
+
+![AWS EC2](screenshots/aws-ec2.png)
+
+Shows the AWS EC2 environment used to host the deployment.
+
+### Deployed Portfolio Website
+
+![Live Website](screenshots/Home-page.png)
+
+Shows the portfolio homepage served by the deployed Nginx container.
+
+### Portfolio Projects Page
+
+![Projects](screenshots/projects.png)
+
+Shows the projects section of the deployed portfolio.
+
+### Resume Page
+
+![Resume](screenshots/Resume.png)
+
+Shows the resume section available through the deployed portfolio.
+
+## Current Limitations
+
+This project was implemented as a hands-on CI/CD and container deployment project rather than a production deployment platform.
+
+The current implementation:
+
+* Deploys to a single EC2-based environment.
+* Builds Docker images locally within the Jenkins deployment workflow rather than using an external container registry.
+* Replaces the existing application container during deployment rather than providing zero-downtime releases.
+* Does not currently include automated application testing as a pipeline quality gate.
+* Does not include integrated monitoring or alerting.
+
+These limitations do not affect the core objective of the project, which was to implement and verify an automated GitHub-to-Jenkins-to-Docker deployment workflow.
+
+## Future Improvements
+
+Potential improvements to the current implementation include:
+
+* Store versioned Docker images in a container registry.
+* Provision the AWS infrastructure using Terraform.
+* Add automated validation or testing stages before deployment.
+* Implement a zero-downtime deployment strategy.
+* Add monitoring and observability for the deployed application and infrastructure.
+
+## Author
 
 **Sathya Moorthy S**
 
-Cloud & DevOps Enthusiast
-
-If you found this project useful, consider giving it a ⭐.
-
----
-
-## 📄 License
-
-This project is intended for learning and portfolio purposes.
+DevOps & Cloud
