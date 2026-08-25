@@ -217,4 +217,4 @@ These are intentionally kept outside the current implementation so that this pro
 
 **Sathya Moorthy S**
 
-DevOps & Cloud
+DevOps & Cloud engineer
