@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
 
     environment {
@@ -34,11 +35,42 @@ pipeline {
             }
         }
 
+        stage('Verify Container Health') {
+            steps {
+                sh '''
+                    echo "Waiting for container to become healthy..."
+
+                    for i in {1..12}; do
+                        STATUS=$(docker inspect --format='{{.State.Health.Status}}' ${CONTAINER_NAME})
+
+                        echo "Health status: $STATUS"
+
+                        if [ "$STATUS" = "healthy" ]; then
+                            echo "Container is healthy!"
+                            exit 0
+                        fi
+
+                        if [ "$STATUS" = "unhealthy" ]; then
+                            echo "Container is unhealthy!"
+                            docker logs ${CONTAINER_NAME}
+                            exit 1
+                        fi
+
+                        sleep 5
+                    done
+
+                    echo "Container did not become healthy within 60 seconds."
+                    docker logs ${CONTAINER_NAME}
+                    exit 1
+                '''
+            }
+        }
     }
 
     post {
+
         success {
-            echo 'Pipeline Trigger Test'
+            echo 'Pipeline completed successfully - Docker container is healthy!'
         }
 
         failure {
