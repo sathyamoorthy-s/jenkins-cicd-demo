@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = "jenkins-cicd-demo"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "mywebsite"
-        PREVIOUS_IMAGE = ""
+        DEPLOYED_IMAGE_FILE = "/var/lib/jenkins/deployed_image.txt"
     }
 
     stages {
@@ -27,14 +27,14 @@ pipeline {
             steps {
                 script {
                     env.PREVIOUS_IMAGE = sh(
-                        script: "docker inspect --format='{{.Config.Image}}' ${CONTAINER_NAME} 2>/dev/null || true",
+                        script: "cat ${DEPLOYED_IMAGE_FILE} 2>/dev/null || true",
                         returnStdout: true
                     ).trim()
 
                     if (env.PREVIOUS_IMAGE) {
-                        echo "Previous deployed image: ${env.PREVIOUS_IMAGE}"
+                        echo "Previous successful image: ${env.PREVIOUS_IMAGE}"
                     } else {
-                        echo "No previous container found. This may be the first deployment."
+                        echo "No previous successful deployment recorded."
                     }
                 }
             }
@@ -42,8 +42,10 @@ pipeline {
 
         stage('Stop Existing Container') {
             steps {
-                sh 'docker stop ${CONTAINER_NAME} || true'
-                sh 'docker rm ${CONTAINER_NAME} || true'
+                sh '''
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                '''
             }
         }
 
@@ -97,12 +99,21 @@ pipeline {
 
                     echo "HTTP Status: $STATUS"
 
-                    if [ "$STATUS" = "999" ]; then
+                    if [ "$STATUS" = "200" ]; then
                         echo "Application test passed!"
                     else
                         echo "Application test failed!"
                         exit 1
                     fi
+                '''
+            }
+        }
+
+        stage('Record Successful Deployment') {
+            steps {
+                sh '''
+                    echo "${IMAGE_NAME}:${IMAGE_TAG}" > ${DEPLOYED_IMAGE_FILE}
+                    echo "Recorded successful deployment: ${IMAGE_NAME}:${IMAGE_TAG}"
                 '''
             }
         }
@@ -161,8 +172,9 @@ pipeline {
                         docker logs ${CONTAINER_NAME}
                         exit 1
                     '''
+
                 } else {
-                    echo 'No previous image available. Rollback skipped.'
+                    echo 'No previous successful deployment recorded. Rollback skipped.'
                 }
             }
         }
