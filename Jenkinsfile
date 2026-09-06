@@ -69,6 +69,25 @@ pipeline {
                 '''
             }
         }
+
+        stage('Test Application') {
+            steps {
+                sh '''
+                    echo "Testing application..."
+
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
+
+                    echo "HTTP Status: $STATUS"
+
+                    if [ "$STATUS" = "200" ]; then
+                        echo "Application test passed!"
+                    else
+                        echo "Application test failed!"
+                        exit 1
+                    fi
+                '''
+            }
+        }
     }
 
     post {
