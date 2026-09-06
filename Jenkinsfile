@@ -6,7 +6,6 @@ pipeline {
         IMAGE_NAME = "jenkins-cicd-demo"
         IMAGE_TAG = "${BUILD_NUMBER}"
         CONTAINER_NAME = "mywebsite"
-        DEPLOYED_IMAGE_FILE = "/var/lib/jenkins/deployed_image.txt"
     }
 
     stages {
@@ -23,23 +22,6 @@ pipeline {
             }
         }
 
-        stage('Get Previous Image') {
-            steps {
-                script {
-                    env.PREVIOUS_IMAGE = sh(
-                        script: "cat ${DEPLOYED_IMAGE_FILE} 2>/dev/null || true",
-                        returnStdout: true
-                    ).trim()
-
-                    if (env.PREVIOUS_IMAGE) {
-                        echo "Previous successful image: ${env.PREVIOUS_IMAGE}"
-                    } else {
-                        echo "No previous successful deployment recorded."
-                    }
-                }
-            }
-        }
-
         stage('Stop Existing Container') {
             steps {
                 sh '''
@@ -51,7 +33,12 @@ pipeline {
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}'
+                sh '''
+                    docker run -d \
+                        -p 80:80 \
+                        --name ${CONTAINER_NAME} \
+                        ${IMAGE_NAME}:${IMAGE_TAG}
+                '''
             }
         }
 
@@ -108,75 +95,18 @@ pipeline {
                 '''
             }
         }
-
-        stage('Record Successful Deployment') {
-            steps {
-                sh '''
-                    echo "${IMAGE_NAME}:${IMAGE_TAG}" > ${DEPLOYED_IMAGE_FILE}
-                    echo "Recorded successful deployment: ${IMAGE_NAME}:${IMAGE_TAG}"
-                '''
-            }
-        }
     }
 
     post {
 
         success {
-            echo 'Pipeline completed successfully - Docker container is healthy!'
+            echo "Deployment successful!"
+            echo "Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
+            echo "Container: ${CONTAINER_NAME}"
         }
 
         failure {
-            echo 'Deployment failed! Starting rollback...'
-
-            script {
-
-                if (env.PREVIOUS_IMAGE) {
-
-                    sh '''
-                        echo "Rolling back to ${PREVIOUS_IMAGE}..."
-
-                        docker stop ${CONTAINER_NAME} || true
-                        docker rm ${CONTAINER_NAME} || true
-
-                        docker run -d \
-                            -p 80:80 \
-                            --name ${CONTAINER_NAME} \
-                            ${PREVIOUS_IMAGE}
-
-                        echo "Rollback container started."
-
-                        i=1
-
-                        while [ $i -le 12 ]; do
-
-                            STATUS=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}starting{{end}}' ${CONTAINER_NAME})
-
-                            echo "Rollback health status: $STATUS"
-
-                            if [ "$STATUS" = "healthy" ]; then
-                                echo "Rollback successful!"
-                                exit 0
-                            fi
-
-                            if [ "$STATUS" = "unhealthy" ]; then
-                                echo "Rollback container is unhealthy!"
-                                docker logs ${CONTAINER_NAME}
-                                exit 1
-                            fi
-
-                            sleep 5
-                            i=$((i + 1))
-                        done
-
-                        echo "Rollback health check timed out."
-                        docker logs ${CONTAINER_NAME}
-                        exit 1
-                    '''
-
-                } else {
-                    echo 'No previous successful deployment recorded. Rollback skipped.'
-                }
-            }
+            echo "Deployment failed!"
         }
     }
 }
