@@ -97,7 +97,7 @@ pipeline {
 
                     echo "HTTP Status: $STATUS"
 
-                    if [ "$STATUS" = "200" ]; then
+                    if [ "$STATUS" = "999" ]; then
                         echo "Application test passed!"
                     else
                         echo "Application test failed!"
