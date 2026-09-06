@@ -41,7 +41,8 @@ pipeline {
                     echo "Waiting for container to become healthy..."
 
                     for i in {1..12}; do
-                        STATUS=$(docker inspect --format='{{.State.Health.Status}}' ${CONTAINER_NAME})
+
+                        STATUS=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}starting{{end}}' ${CONTAINER_NAME})
 
                         echo "Health status: $STATUS"
 
