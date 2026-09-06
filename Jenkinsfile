@@ -32,15 +32,17 @@ pipeline {
         }
 
         stage('Run Docker Container') {
-            steps {
-                sh '''
-                    docker run -d \
-                        -p 80:80 \
-                        --name ${CONTAINER_NAME} \
-                        ${IMAGE_NAME}:${IMAGE_TAG}
-                '''
-            }
-        }
+    steps {
+        sh '''
+            docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
+
+            docker run -d \
+                -p 80:80 \
+                --name ${CONTAINER_NAME} \
+                ${IMAGE_NAME}:${IMAGE_TAG}
+        '''
+    }
+}
 
         stage('Verify Container Health') {
             steps {
