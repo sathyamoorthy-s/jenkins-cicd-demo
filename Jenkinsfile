@@ -40,7 +40,9 @@ pipeline {
                 sh '''
                     echo "Waiting for container to become healthy..."
 
-                    for i in {1..12}; do
+                    i=1
+
+                    while [ $i -le 12 ]; do
 
                         STATUS=$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}starting{{end}}' ${CONTAINER_NAME})
 
@@ -58,6 +60,7 @@ pipeline {
                         fi
 
                         sleep 5
+                        i=$((i + 1))
                     done
 
                     echo "Container did not become healthy within 60 seconds."
